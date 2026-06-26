@@ -254,6 +254,8 @@
 
     var current = 0;
     var answers = new Array(questions.length).fill(null);
+    var contactInfo = { name: '', email: '', phone: '' };
+    var totalSteps = questions.length + 1;
 
     var card = document.getElementById('surveyCard');
     var progressFill = document.getElementById('progressFill');
@@ -266,8 +268,8 @@
 
     function renderQuestion() {
       var q = questions[current];
-      progressFill.style.width = (((current) / questions.length) * 100) + '%';
-      progressText.textContent = 'Question ' + (current + 1) + ' of ' + questions.length;
+      progressFill.style.width = (((current) / totalSteps) * 100) + '%';
+      progressText.textContent = 'Question ' + (current + 1) + ' of ' + totalSteps;
 
       var html = '<div class="eyebrow">For Parents</div>';
       html += '<div class="question">' + q.question + '</div>';
@@ -279,7 +281,7 @@
       html += '</div>';
       html += '<div class="nav-row">';
       html += '<button class="back-btn" id="backBtn"' + (current === 0 ? ' disabled' : '') + '>&larr; Back</button>';
-      html += '<button class="next-btn" id="nextBtn"' + (answers[current] === null ? ' disabled' : '') + '>' + (current === questions.length - 1 ? 'Submit' : 'Next') + '</button>';
+      html += '<button class="next-btn" id="nextBtn"' + (answers[current] === null ? ' disabled' : '') + '>Next</button>';
       html += '</div>';
 
       card.innerHTML = html;
@@ -302,8 +304,58 @@
           current++;
           renderQuestion();
         } else {
-          renderDone();
+          renderContact();
         }
+      });
+    }
+
+    function renderContact() {
+      progressFill.style.width = ((questions.length / totalSteps) * 100) + '%';
+      progressText.textContent = 'Step ' + totalSteps + ' of ' + totalSteps;
+
+      var fieldStyle = 'width:100%;padding:14px 16px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:15px;font-family:inherit;';
+      var labelStyle = 'display:block;font-size:13px;font-weight:600;color:#1f2937;margin-bottom:6px;';
+
+      var html = '<div class="eyebrow">Almost Done</div>';
+      html += '<div class="question">How can we reach you?</div>';
+      html += '<div class="options" style="gap:16px;">';
+      html += '<div><label style="' + labelStyle + '">Full name</label><input type="text" id="contactName" placeholder="Jane Doe" value="' + contactInfo.name + '" style="' + fieldStyle + '"></div>';
+      html += '<div><label style="' + labelStyle + '">Email</label><input type="email" id="contactEmail" placeholder="jane@email.com" value="' + contactInfo.email + '" style="' + fieldStyle + '"></div>';
+      html += '<div><label style="' + labelStyle + '">Phone</label><input type="tel" id="contactPhone" placeholder="(555) 123-4567" value="' + contactInfo.phone + '" style="' + fieldStyle + '"></div>';
+      html += '</div>';
+      html += '<div class="nav-row">';
+      html += '<button class="back-btn" id="backBtn">&larr; Back</button>';
+      html += '<button class="next-btn" id="nextBtn" disabled>Submit</button>';
+      html += '</div>';
+
+      card.innerHTML = html;
+
+      var nameInput = document.getElementById('contactName');
+      var emailInput = document.getElementById('contactEmail');
+      var phoneInput = document.getElementById('contactPhone');
+      var nextBtn = document.getElementById('nextBtn');
+
+      function checkValid() {
+        var name = nameInput.value.trim();
+        var emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim());
+        nextBtn.disabled = !(name && emailValid);
+      }
+      [nameInput, emailInput, phoneInput].forEach(function (el) {
+        el.addEventListener('input', checkValid);
+      });
+      checkValid();
+
+      document.getElementById('backBtn').addEventListener('click', function () {
+        current = questions.length - 1;
+        renderQuestion();
+      });
+
+      nextBtn.addEventListener('click', function () {
+        if (nextBtn.disabled) return;
+        contactInfo.name = nameInput.value.trim();
+        contactInfo.email = emailInput.value.trim();
+        contactInfo.phone = phoneInput.value.trim();
+        renderDone();
       });
     }
 
@@ -311,10 +363,12 @@
       progressFill.style.width = '100%';
       progressText.textContent = 'Complete';
 
+      var firstName = contactInfo.name ? contactInfo.name.split(' ')[0] : '';
+
       var html = '<div class="done-card">';
       html += '<div class="done-icon">&#10003;</div>';
-      html += '<h1>Thanks — you\'re all set</h1>';
-      html += '<p>We\'ve got your answers and your ZIP code. We\'ll use this to start matching your child with local internship leads.</p>';
+      html += '<h1>Thanks' + (firstName ? ', ' + firstName : '') + ' — you\'re all set</h1>';
+      html += '<p>We\'ve got your answers and your ZIP code. We\'ll reach out to ' + (contactInfo.email || 'you') + ' as soon as we have local internship leads ready for your child.</p>';
       html += '<a class="back-home" href="index.html">&larr; Back to home</a>';
       html += '</div>';
       card.innerHTML = html;
