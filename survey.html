@@ -364,14 +364,22 @@
       progressText.textContent = 'Complete';
 
       var firstName = contactInfo.name ? contactInfo.name.split(' ')[0] : '';
+      var calendlyParams = new URLSearchParams();
+      if (contactInfo.name) calendlyParams.set('name', contactInfo.name);
+      if (contactInfo.email) calendlyParams.set('email', contactInfo.email);
+      var calendlyUrl = 'https://calendly.com/pablo2503016-hybridge/30min?' + calendlyParams.toString();
 
       var html = '<div class="done-card">';
       html += '<div class="done-icon">&#10003;</div>';
-      html += '<h1>Thanks' + (firstName ? ', ' + firstName : '') + ' — you\'re all set</h1>';
-      html += '<p>We\'ve got your answers and your ZIP code. We\'ll reach out to ' + (contactInfo.email || 'you') + ' as soon as we have local internship leads ready for your child.</p>';
-      html += '<a class="back-home" href="index.html">&larr; Back to home</a>';
+      html += '<h1>Thanks' + (firstName ? ', ' + firstName : '') + ' — taking you to scheduling</h1>';
+      html += '<p>We\'ve got your answers and your ZIP code. Pick a time that works for you and we\'ll talk through the next steps.</p>';
+      html += '<a class="back-home" href="' + calendlyUrl + '">Continue to scheduling &rarr;</a>';
       html += '</div>';
       card.innerHTML = html;
+
+      setTimeout(function () {
+        window.location.href = calendlyUrl;
+      }, 1200);
     }
 
     renderQuestion();
