@@ -266,6 +266,30 @@
     var zip = params.get('zip');
     if (zip) { zipPill.textContent = 'ZIP: ' + zip; }
 
+    function submitToWebhook() {
+      var payload = {
+        zip: zip || null,
+        answers: questions.map(function (q, i) {
+          return {
+            question: q.question,
+            answer: answers[i] !== null ? q.options[answers[i]] : null
+          };
+        }),
+        name: contactInfo.name,
+        email: contactInfo.email,
+        phone: contactInfo.phone,
+        submittedAt: new Date().toISOString()
+      };
+
+      fetch('https://hook.us2.make.com/njxmg5ngwc1337o2dpxt0adbpva100gs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(function (err) {
+        console.error('Webhook submission failed:', err);
+      });
+    }
+
     function renderQuestion() {
       var q = questions[current];
       progressFill.style.width = (((current) / totalSteps) * 100) + '%';
@@ -355,6 +379,7 @@
         contactInfo.name = nameInput.value.trim();
         contactInfo.email = emailInput.value.trim();
         contactInfo.phone = phoneInput.value.trim();
+        submitToWebhook();
         renderDone();
       });
     }
