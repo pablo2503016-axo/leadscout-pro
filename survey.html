@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeadScout Pro — Quick Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    max-width: 480px;
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow: 0 20px 50px rgba(15,23,42,0.1);
+    text-align: center;
+  }
+  .card h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+  }
+  .card p {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .zip-pill {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4338ca;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+  a.back {
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  a.back:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>You're almost there</h1>
+    <p>This is a placeholder for the question flow. Once the survey questions are ready, this page will become a typeform-style, one-question-at-a-time experience.</p>
+    <span class="zip-pill" id="zipPill">ZIP: —</span>
+    <p><a class="back" href="index.html">&larr; Back to home</a></p>
+  </div>
+
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    var zip = params.get('zip');
+    if (zip) {
+      document.getElementById('zipPill').textContent = 'ZIP: ' + zip;
+    }
+  </script>
+</body>
+</html>
