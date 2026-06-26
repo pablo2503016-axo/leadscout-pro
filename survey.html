@@ -9,69 +9,318 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
+  html, body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: #f8fafc;
     min-height: 100vh;
+  }
+  body {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 24px;
   }
-  .card {
-    max-width: 480px;
+
+  .progress-wrap {
     width: 100%;
-    background: #fff;
-    border-radius: 16px;
-    padding: 40px 32px;
-    box-shadow: 0 20px 50px rgba(15,23,42,0.1);
-    text-align: center;
+    max-width: 560px;
+    margin-bottom: 28px;
   }
-  .card h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 12px;
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
   }
-  .card p {
-    font-size: 15px;
-    color: #475569;
-    line-height: 1.6;
-    margin-bottom: 20px;
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4f46e5, #0891b2);
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #64748b;
   }
   .zip-pill {
     display: inline-block;
     background: #eef2ff;
     color: #4338ca;
     font-weight: 600;
-    font-size: 13px;
-    padding: 6px 14px;
+    font-size: 12px;
+    padding: 4px 12px;
     border-radius: 999px;
+  }
+
+  .card {
+    max-width: 560px;
+    width: 100%;
+    background: #fff;
+    border-radius: 20px;
+    padding: 44px 36px;
+    box-shadow: 0 20px 50px rgba(15,23,42,0.1);
+  }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #4f46e5;
+    margin-bottom: 14px;
+  }
+  .question {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .option-btn {
+    text-align: left;
+    width: 100%;
+    padding: 16px 18px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 15.5px;
+    font-weight: 500;
+    color: #1f2937;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .option-btn:hover {
+    border-color: #4f46e5;
+    background: #f5f3ff;
+  }
+  .option-btn.selected {
+    border-color: #4f46e5;
+    background: #eef2ff;
+    color: #4338ca;
+    font-weight: 600;
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 8px 4px;
+  }
+  .back-btn:hover { color: #1f2937; }
+  .back-btn:disabled { visibility: hidden; }
+
+  .next-btn {
+    background: #f59e0b;
+    border: none;
+    color: #1f2937;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 26px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .next-btn:hover { background: #fbbf24; }
+  .next-btn:disabled {
+    background: #e2e8f0;
+    color: #94a3b8;
+    cursor: not-allowed;
+  }
+
+  /* Completion screen */
+  .done-card { text-align: center; }
+  .done-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: #ecfdf5;
+    color: #059669;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    margin: 0 auto 20px;
+  }
+  .done-card h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 12px;
+  }
+  .done-card p {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.6;
     margin-bottom: 24px;
   }
-  a.back {
+  a.back-home {
     color: #4f46e5;
     font-weight: 600;
     font-size: 14px;
     text-decoration: none;
   }
-  a.back:hover { text-decoration: underline; }
+  a.back-home:hover { text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .card { padding: 32px 24px; }
+    .question { font-size: 20px; }
+  }
 </style>
 </head>
 <body>
-  <div class="card">
-    <h1>You're almost there</h1>
-    <p>This is a placeholder for the question flow. Once the survey questions are ready, this page will become a typeform-style, one-question-at-a-time experience.</p>
-    <span class="zip-pill" id="zipPill">ZIP: —</span>
-    <p><a class="back" href="index.html">&larr; Back to home</a></p>
+
+  <div class="progress-wrap">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 5</span>
+      <span class="zip-pill" id="zipPill">ZIP: —</span>
+    </div>
   </div>
 
+  <div class="card" id="surveyCard"></div>
+
   <script>
+    var questions = [
+      {
+        question: "What's the biggest obstacle you and your child are facing in finding a local internship?",
+        options: [
+          "We don't know where to look",
+          "We don't have contacts at local businesses",
+          "We don't have time to help search",
+          "We're worried postings aren't legitimate",
+          "My child isn't motivated to search"
+        ]
+      },
+      {
+        question: "How is your child currently searching for internships?",
+        options: [
+          "Cold-emailing businesses",
+          "Asking friends or family for contacts",
+          "Through the school's career office",
+          "Online job boards",
+          "They haven't started looking yet"
+        ]
+      },
+      {
+        question: "When do they need to have something lined up?",
+        options: [
+          "This summer",
+          "Next school year",
+          "During the next school break",
+          "Just exploring for now"
+        ]
+      },
+      {
+        question: "What would matter most to you about this?",
+        options: [
+          "A real, paid opportunity",
+          "Resume-building experience",
+          "Local connections and networking",
+          "Saving us time and stress",
+          "Peace of mind that it's legitimate"
+        ]
+      },
+      {
+        question: "If LeadScout Pro found 3-5 vetted local internship leads ready for your child to apply to, how much would that be worth to you?",
+        options: [
+          "Free only",
+          "$5-15/month",
+          "$15-30/month",
+          "$30+/month",
+          "Not sure yet"
+        ]
+      }
+    ];
+
+    var current = 0;
+    var answers = new Array(questions.length).fill(null);
+
+    var card = document.getElementById('surveyCard');
+    var progressFill = document.getElementById('progressFill');
+    var progressText = document.getElementById('progressText');
+    var zipPill = document.getElementById('zipPill');
+
     var params = new URLSearchParams(window.location.search);
     var zip = params.get('zip');
-    if (zip) {
-      document.getElementById('zipPill').textContent = 'ZIP: ' + zip;
+    if (zip) { zipPill.textContent = 'ZIP: ' + zip; }
+
+    function renderQuestion() {
+      var q = questions[current];
+      progressFill.style.width = (((current) / questions.length) * 100) + '%';
+      progressText.textContent = 'Question ' + (current + 1) + ' of ' + questions.length;
+
+      var html = '<div class="eyebrow">For Parents</div>';
+      html += '<div class="question">' + q.question + '</div>';
+      html += '<div class="options">';
+      q.options.forEach(function (opt, i) {
+        var selected = answers[current] === i ? ' selected' : '';
+        html += '<button class="option-btn' + selected + '" data-index="' + i + '">' + opt + '</button>';
+      });
+      html += '</div>';
+      html += '<div class="nav-row">';
+      html += '<button class="back-btn" id="backBtn"' + (current === 0 ? ' disabled' : '') + '>&larr; Back</button>';
+      html += '<button class="next-btn" id="nextBtn"' + (answers[current] === null ? ' disabled' : '') + '>' + (current === questions.length - 1 ? 'Submit' : 'Next') + '</button>';
+      html += '</div>';
+
+      card.innerHTML = html;
+
+      var optionBtns = card.querySelectorAll('.option-btn');
+      optionBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          answers[current] = parseInt(btn.getAttribute('data-index'), 10);
+          renderQuestion();
+        });
+      });
+
+      document.getElementById('backBtn').addEventListener('click', function () {
+        if (current > 0) { current--; renderQuestion(); }
+      });
+
+      document.getElementById('nextBtn').addEventListener('click', function () {
+        if (answers[current] === null) return;
+        if (current < questions.length - 1) {
+          current++;
+          renderQuestion();
+        } else {
+          renderDone();
+        }
+      });
     }
+
+    function renderDone() {
+      progressFill.style.width = '100%';
+      progressText.textContent = 'Complete';
+
+      var html = '<div class="done-card">';
+      html += '<div class="done-icon">&#10003;</div>';
+      html += '<h1>Thanks — you\'re all set</h1>';
+      html += '<p>We\'ve got your answers and your ZIP code. We\'ll use this to start matching your child with local internship leads.</p>';
+      html += '<a class="back-home" href="index.html">&larr; Back to home</a>';
+      html += '</div>';
+      card.innerHTML = html;
+    }
+
+    renderQuestion();
   </script>
 </body>
 </html>
