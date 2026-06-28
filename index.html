@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://fast.wistia.com/player.js" async></script>
+<script src="https://fast.wistia.com/embed/8lokv2q2mm.js" async type="module"></script>
 <style>
   :root {
     --indigo: #4f46e5;
@@ -61,29 +63,16 @@
     max-width: 560px;
     margin: 0 auto 40px;
   }
-  .video-placeholder {
-    background: rgba(15, 23, 42, 0.35);
-    border: 1px solid rgba(255,255,255,0.18);
+  .video-embed {
     border-radius: 16px;
-    aspect-ratio: 16/9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 12px;
+    overflow: hidden;
     margin-bottom: 44px;
   }
-  .play-button {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.95);
-    color: var(--indigo);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-  }
-  .video-placeholder p {
-    color: rgba(255,255,255,0.75);
-    font-size: 14px;
+  wistia-player[media-id='8lokv2q2mm']:not(:defined) {
+    background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/8lokv2q2mm/swatch');
+    display: block;
+    filter: blur(5px);
+    padding-top: 52.5%;
   }
   .zip-card {
     background: #fff;
@@ -139,9 +128,8 @@
       <h1 class="headline">Internships Are Closer Than You Think</h1>
       <p class="subheadline">LeadScout Pro scouts local businesses near you that are looking for student interns — so you can skip the national job boards and build experience close to home.</p>
 
-      <div class="video-placeholder">
-        <div class="play-button">&#9658;</div>
-        <p>Demo video coming soon</p>
+      <div class="video-embed">
+        <wistia-player media-id="8lokv2q2mm" aspect="1.9047619047619047"></wistia-player>
       </div>
 
       <div class="zip-card">
